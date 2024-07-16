@@ -23,7 +23,6 @@ const bgMusic = new Audio("assets/sounds/bgMusic.mp3");
 const randomIndex = getRandomInt(0, wordList.length);
 
 let wordle = wordList[randomIndex].toUpperCase();
-console.log(wordle);
 let currentRow = 0;
 let currentTile = 0;
 let isGameOver = false;
