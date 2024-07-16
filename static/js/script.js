@@ -137,10 +137,14 @@ async function checkRow() {
 
     if (wordle === guess) {
       showMessage("Yeeey! You guessed the word!");
+      isGameOver = true;
+      return;
     }
 
     if (currentRow >= 5) {
       showMessage(`Game Over! The word is ${wordle}`);
+      isGameOver = true;  
+      return;
     }
 
     currentRow++;

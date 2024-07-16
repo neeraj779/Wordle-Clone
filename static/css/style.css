@@ -130,6 +130,11 @@ body {
     flex: 5;
 }
 
+.row:nth-child(2) {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
 .message-container {
     width: 100%;
     text-align: center;
