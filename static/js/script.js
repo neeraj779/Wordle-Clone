@@ -16,7 +16,7 @@ const wordList = [
 ]; 
 
 const wrongGuessSound = new Audio("assets/sounds/wrongGuessSound.mp3");
-const winSound = new Audio("assets/sounds/winSound.mp3");
+const winSound = new Audio("assets/sounds/winSound2.m4a");
 const gameOverSound = new Audio("assets/sounds/gameOverSound.wav");
 
 const randomIndex = getRandomInt(0, wordList.length);
