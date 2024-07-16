@@ -15,14 +15,13 @@ const wordList = [
   "trees", "truck", "truth", "visit", "voice", "waste", "watch", "white"
 ]; 
 
-const wrongGuessSound = new Audio("../../assets/sounds/wrongGuessSound.mp3");
-const winSound = new Audio("../../assets/sounds/winSound.mp3");
-const gameOverSound = new Audio("../../assets/sounds/gameOverSound.wav");
+const wrongGuessSound = new Audio("assets/sounds/wrongGuessSound.mp3");
+const winSound = new Audio("assets/sounds/winSound.mp3");
+const gameOverSound = new Audio("assets/sounds/gameOverSound.wav");
 
 const randomIndex = getRandomInt(0, wordList.length);
 
 let wordle = wordList[randomIndex].toUpperCase();
-console.log(wordle);
 let currentRow = 0;
 let currentTile = 0;
 let isGameOver = false;
@@ -219,7 +218,7 @@ function showMessage(message, outcome) {
       title: title,
       text: message,
       color: "#ffffff",
-      imageUrl: `../../assets/gifs/${gifImg}`,
+      imageUrl: `assets/gifs/${gifImg}`,
       imageWidth: 400,
       imageHeight: 200,
       imageAlt: "Custom image",
