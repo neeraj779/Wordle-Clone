@@ -13,15 +13,17 @@ const wordList = [
   "round", "scale", "scene", "south", "speak", "stage", "start", "story",
   "study", "teach", "tears", "thank", "think", "those", "touch", "train",
   "trees", "truck", "truth", "visit", "voice", "waste", "watch", "white"
-]; 
+]; // prettier-ignore
 
 const wrongGuessSound = new Audio("assets/sounds/wrongGuessSound.mp3");
-const winSound = new Audio("assets/sounds/winSound2.m4a");
+const winSound = new Audio("assets/sounds/winSound.m4a");
 const gameOverSound = new Audio("assets/sounds/gameOverSound.wav");
+const bgMusic = new Audio("assets/sounds/bgMusic.mp3");
 
 const randomIndex = getRandomInt(0, wordList.length);
 
 let wordle = wordList[randomIndex].toUpperCase();
+console.log(wordle);
 let currentRow = 0;
 let currentTile = 0;
 let isGameOver = false;
@@ -33,6 +35,8 @@ const guessRows = Array.from({ length: 6 }, () =>
 
 function initializeGame() {
   let dontShowInstructions = localStorage.getItem("dontShowInstructions");
+  let dontShowMusic = localStorage.getItem("dontShowMusic");
+
   if (!dontShowInstructions) {
     Swal.fire({
       title: "<strong>How To Play</strong>",
@@ -57,9 +61,11 @@ function initializeGame() {
     }).then((result) => {
       if (result.dismiss) {
         localStorage.setItem("dontShowInstructions", true);
+        if (!dontShowMusic) showMusicSwal();
       }
+      if (result.isConfirmed) if (!dontShowMusic) showMusicSwal();
     });
-  }
+  } else if (!dontShowMusic) showMusicSwal();
 
   createGrid();
   createKeyBoard();
@@ -275,6 +281,28 @@ function addColorToKey(keyLetter, color) {
   key.classList.add(color);
 }
 
+function showMusicSwal() {
+  Swal.fire({
+    title: "Want to play some music? 🎧",
+    text: "Hey there! Want to play some music while you play the game?",
+    color: "#ffffff",
+    imageUrl: `assets/gifs/music.gif`,
+    imageWidth: 400,
+    imageHeight: 200,
+    imageAlt: "music",
+    allowOutsideClick: false,
+    focusConfirm: false,
+    showCancelButton: true,
+    showDenyButton: true,
+    confirmButtonText: "Turn on the music!",
+    cancelButtonText: "Don't show again",
+    denyButtonText: "No, thanks!",
+  }).then((result) => {
+    if (result.isConfirmed) bgMusic.play();
+    if (result.isDismissed) localStorage.setItem("dontShowMusic", true);
+  });
+}
+
 document.addEventListener("keydown", function (event) {
   const key = event.key.toUpperCase();
   const allowedKeys = /^[A-Z]$/;
@@ -284,6 +312,19 @@ document.addEventListener("keydown", function (event) {
   } else {
     event.preventDefault();
   }
+});
+
+document.addEventListener("DOMContentLoaded", (event) => {
+  const playButton = document.getElementById("play-button");
+  const pauseButton = document.getElementById("pause-button");
+
+  playButton.addEventListener("click", () => {
+    bgMusic.play();
+  });
+
+  pauseButton.addEventListener("click", () => {
+    bgMusic.pause();
+  });
 });
 
 initializeGame();

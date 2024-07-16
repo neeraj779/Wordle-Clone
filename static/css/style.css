@@ -149,6 +149,27 @@ body {
     text-align: left;
 }
 
+.audio-control {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.audio-control button {
+    background-color: #3a3a3c;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.audio-control button:hover {
+    background-color: #818384;
+}
+
 
 @media (max-width: 480px) {
     .container {
