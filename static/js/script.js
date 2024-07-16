@@ -20,17 +20,16 @@ let currentRow = 0;
 let currentTile = 0;
 let isGameOver = false;
 
-const keys = [
-  "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
-  "A", "S", "D", "F", "G", "H", "J", "K", "L", "ENTER",
-  "Z", "X", "C", "V", "B", "N", "M", "<<"
-]; 
-
 const guessRows = Array.from({ length: 6 }, () =>
   Array.from({ length: 5 }, () => "")
 );
 
 function initializeGame() {
+  createGrid();
+  createKeyBoard();
+}
+
+function createGrid() {
   guessRows.forEach((guessRow, guessRowIndex) => {
     const rowElem = document.createElement("div");
     rowElem.setAttribute("id", `guessRow-${guessRowIndex}`);
@@ -48,13 +47,38 @@ function initializeGame() {
 
     tileDisplay.appendChild(rowElem);
   });
+}
 
-  keys.forEach((key) => {
-    const buttonElem = document.createElement("button");
-    buttonElem.textContent = key;
-    buttonElem.setAttribute("id", key);
-    buttonElem.addEventListener("click", () => handleClick(key));
-    keyBoard.appendChild(buttonElem);
+function createKeyBoard() {
+  const rows = [
+    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+    ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "<<"],
+  ];
+
+  const keyboardContainer = document.querySelector(".keyboard");
+
+  rows.forEach((row) => {
+    const rowDiv = document.createElement("div");
+    rowDiv.classList.add("row");
+
+    row.forEach((key) => {
+      const keyDiv = document.createElement("div");
+      keyDiv.classList.add("key");
+      keyDiv.textContent = key;
+      keyDiv.setAttribute("id", key);
+      keyDiv.addEventListener("click", () => handleClick(key));
+
+      if (key === "Backspace" || key === "Enter") {
+        keyDiv.classList.add("wide");
+      } else if (key === "Space") {
+        keyDiv.classList.add("space");
+      }
+
+      rowDiv.appendChild(keyDiv);
+    });
+
+    keyboardContainer.appendChild(rowDiv);
   });
 }
 
@@ -66,6 +90,9 @@ function handleClick(key) {
   if (!isGameOver) {
     switch (key) {
       case "<<":
+        deleteLetter();
+        break;
+      case "BACKSPACE":
         deleteLetter();
         break;
       case "ENTER":
@@ -102,29 +129,18 @@ function deleteLetter() {
   }
 }
 
-function checkRow() {
+async function checkRow() {
   const guess = guessRows[currentRow].join("");
 
   if (currentTile > 4) {
-    if (guess === wordle) {
-      flipTile();
-      showMessage("Magnificent!");
-      isGameOver = true;
-      return;
-    }
-
     flipTile();
 
     if (wordle === guess) {
-      showMessage("Magnificent!");
-      isGameOver = true;
-      return;
+      showMessage("Yeeey! You guessed the word!");
     }
 
     if (currentRow >= 5) {
-      isGameOver = true;
       showMessage(`Game Over! The word is ${wordle}`);
-      return;
     }
 
     currentRow++;
@@ -136,7 +152,6 @@ function showMessage(message) {
   const messageElem = document.createElement("p");
   messageElem.textContent = message;
   messageDisplay.appendChild(messageElem);
-  setTimeout(() => messageDisplay.removeChild(messageElem), 2000);
 }
 
 function flipTile() {
@@ -165,8 +180,6 @@ function flipTile() {
   });
 
   rowTiles.forEach((tile, index) => {
-    const dataLetter = tile.getAttribute("data");
-
     setTimeout(() => {
       tile.classList.add("flip");
       tile.classList.add(guess[index].color);
@@ -182,10 +195,13 @@ function addColorToKey(keyLetter, color) {
 
 document.addEventListener("keydown", function (event) {
   const key = event.key.toUpperCase();
-  if (keys.includes(key)) {
+  const allowedKeys = /^[A-Z]$/;
+
+  if (key.match(allowedKeys) || key === "ENTER" || key === "BACKSPACE") {
     handleClick(key);
+  } else {
+    event.preventDefault();
   }
 });
 
 initializeGame();
-
