@@ -199,6 +199,7 @@ function checkRow() {
     }
 
     setTimeout(() => {
+      bgMusic.volume = 0.5;
       wrongGuessSound.play();
     }, 500 * 5);
 
