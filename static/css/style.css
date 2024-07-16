@@ -115,11 +115,6 @@ body {
     transform: translateY(-2px);
 }
 
-.key:active {
-    background-color: #d0d0d0;
-    transform: translateY(0);
-}
-
 .key.wide {
     flex: 2;
 }
