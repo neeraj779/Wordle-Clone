@@ -3,28 +3,65 @@ const keyBoard = document.querySelector(".key-container");
 const messageDisplay = document.querySelector(".message-container");
 
 const wordList = [
-  "about", "after", "again", "basic", "break", "cause", "chair", "clean", "comes", "cross",
-  "doubt", "early", "earth", "empty", "equal", "faith", "fight", "final", "floor", "force",
-  "found", "front", "fruit", "glass", "grant", "green", "guess", "happy", "heard", "horse",
-  "house", "human", "ideas", "image", "issue", "learn", "light", "local", "lunch", "maybe",
-  "month", "music", "north", "occur", "offer", "often", "peace", "place", "plant", "power",
-  "price", "proud", "quiet", "ready", "river", "rough", "round", "scale", "scene", "south",
-  "speak", "stage", "start", "story", "study", "teach", "tears", "thank", "think", "those",
-  "touch", "train", "trees", "truck", "truth", "visit", "voice", "waste", "watch", "white"
-];
+  "about", "after", "again", "basic", "break", "cause", "chair", "clean",
+  "comes", "cross", "doubt", "early", "earth", "empty", "equal", "faith",
+  "fight", "final", "floor", "force", "found", "front", "fruit", "glass",
+  "grant", "green", "guess", "happy", "heard", "horse", "house", "human",
+  "ideas", "image", "issue", "learn", "light", "local", "lunch", "maybe",
+  "month", "music", "north", "occur", "offer", "often", "peace", "place",
+  "plant", "power", "price", "proud", "quiet", "ready", "river", "rough",
+  "round", "scale", "scene", "south", "speak", "stage", "start", "story",
+  "study", "teach", "tears", "thank", "think", "those", "touch", "train",
+  "trees", "truck", "truth", "visit", "voice", "waste", "watch", "white"
+]; 
+
+const wrongGuessSound = new Audio("../../assets/sounds/wrongGuessSound.mp3");
+const winSound = new Audio("../../assets/sounds/winSound.mp3");
+const gameOverSound = new Audio("../../assets/sounds/gameOverSound.wav");
 
 const randomIndex = getRandomInt(0, wordList.length);
 
 let wordle = wordList[randomIndex].toUpperCase();
+console.log(wordle);
 let currentRow = 0;
 let currentTile = 0;
 let isGameOver = false;
+let isAnimating = false;
 
 const guessRows = Array.from({ length: 6 }, () =>
   Array.from({ length: 5 }, () => "")
 );
 
 function initializeGame() {
+  let dontShowInstructions = localStorage.getItem("dontShowInstructions");
+  if (!dontShowInstructions) {
+    Swal.fire({
+      title: "<strong>How To Play</strong>",
+      html: `
+        <div class="instruction-card">
+        <p>Guess the Wordle in 6 tries.</p>
+          <p>Each guess must be a valid 5-letter word.</p>
+          <p>The color of the tiles will change to show how close your guess was to the word.</p>
+          <ul>
+              <li>A green square means the letter is correct and in the right position.</li>
+              <li>A yellow square means the letter is correct but in the wrong position.</li>
+              <li>A gray square means the letter is not in the word.</li>
+          </ul>
+          <p>Your goal is to guess the word in as few tries as possible.</p>
+          <p>Good luck and have fun!</p>
+        </div>
+      `,
+      showCancelButton: true,
+      focusConfirm: false,
+      confirmButtonText: "Play!",
+      cancelButtonText: "Don't show again",
+    }).then((result) => {
+      if (result.dismiss) {
+        localStorage.setItem("dontShowInstructions", true);
+      }
+    });
+  }
+
   createGrid();
   createKeyBoard();
 }
@@ -87,7 +124,7 @@ function getRandomInt(min, max) {
 }
 
 function handleClick(key) {
-  if (!isGameOver) {
+  if (!isGameOver && !isAnimating) {
     switch (key) {
       case "<<":
         deleteLetter();
@@ -129,36 +166,75 @@ function deleteLetter() {
   }
 }
 
-async function checkRow() {
+function checkRow() {
   const guess = guessRows[currentRow].join("");
 
   if (currentTile > 4) {
     flipTile();
 
-    if (wordle === guess) {
-      showMessage("Yeeey! You guessed the word!");
+    if (wordle === guess && currentRow < 5) {
+      showMessage("Magnificent! You guessed the word!", 1);
       isGameOver = true;
+      winSound.play();
+      return;
+    } else if (wordle === guess) {
+      showMessage("Great job! You guessed the word!", 1);
+      isGameOver = true;
+      winSound.play();
       return;
     }
 
     if (currentRow >= 5) {
-      showMessage(`Game Over! The word is ${wordle}`);
-      isGameOver = true;  
+      showMessage(`Game Over! The word was ${wordle}`, 0);
+      isGameOver = true;
+      gameOverSound.play();
       return;
     }
+
+    setTimeout(() => {
+      wrongGuessSound.play();
+    }, 500 * 5);
 
     currentRow++;
     currentTile = 0;
   }
 }
 
-function showMessage(message) {
+function showMessage(message, outcome) {
   const messageElem = document.createElement("p");
   messageElem.textContent = message;
+  messageElem.classList.add("message");
   messageDisplay.appendChild(messageElem);
+
+  if (outcome === 1) {
+    gifImg = "won.gif";
+    title = "Yoo Hoo! You Won! 🏆";
+  } else {
+    gifImg = "lost.gif";
+    title = "Opps buddy! You Lost! ☹️";
+  }
+
+  setTimeout(() => {
+    Swal.fire({
+      title: title,
+      text: message,
+      color: "#ffffff",
+      imageUrl: `../../assets/gifs/${gifImg}`,
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: "Custom image",
+      allowOutsideClick: false,
+      confirmButtonText: "Play Again!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        location.reload();
+      }
+    });
+  }, 4000);
 }
 
 function flipTile() {
+  isAnimating = true;
   const rowTiles = Array.from(
     document.querySelector(`#guessRow-${currentRow}`).childNodes
   );
@@ -188,6 +264,9 @@ function flipTile() {
       tile.classList.add("flip");
       tile.classList.add(guess[index].color);
       addColorToKey(guess[index].letter, guess[index].color);
+      if (index === rowTiles.length - 1) {
+        isAnimating = false;
+      }
     }, 500 * index);
   });
 }

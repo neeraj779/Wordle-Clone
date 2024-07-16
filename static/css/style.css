@@ -1,9 +1,6 @@
-* {
-    color: #ffffff;
-    font-family: "Roboto", sans-serif;
-}
-
 body {
+    font-family: Arial, sans-serif;
+    color: #ffffff;
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
@@ -12,6 +9,7 @@ body {
     margin: 0;
     background-color: #121213;
 }
+
 
 .container {
     display: flex;
@@ -132,13 +130,23 @@ body {
     width: 100%;
     text-align: center;
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-p {
+.message {
     background-color: #818384;
     border-radius: 10px;
     padding: 10px;
     margin: 0;
+}
+
+.instruction-card {
+    border: 1px solid #818384;
+    border-radius: 10px;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: left;
 }
 
 @media (max-width: 480px) {
