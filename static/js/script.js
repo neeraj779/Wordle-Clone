@@ -179,11 +179,13 @@ function checkRow() {
     if (wordle === guess && currentRow < 5) {
       showMessage("Magnificent! You guessed the word!", 1);
       isGameOver = true;
+      bgMusic.pause();
       winSound.play();
       return;
     } else if (wordle === guess) {
       showMessage("Great job! You guessed the word!", 1);
       isGameOver = true;
+      bgMusic.pause();
       winSound.play();
       return;
     }
@@ -191,6 +193,7 @@ function checkRow() {
     if (currentRow >= 5) {
       showMessage(`Game Over! The word was ${wordle}`, 0);
       isGameOver = true;
+      bgMusic.pause();
       gameOverSound.play();
       return;
     }
