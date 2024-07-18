@@ -8,6 +8,10 @@ body {
     height: 100vh;
     margin: 0;
     background-color: #121213;
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
 }
 
 
