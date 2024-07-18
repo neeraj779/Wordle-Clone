@@ -306,6 +306,12 @@ function showMusicSwal() {
   });
 }
 
+function resetSettings() {
+  localStorage.removeItem("dontShowInstructions");
+  localStorage.removeItem("dontShowMusic");
+  location.reload();
+}
+
 document.addEventListener("keydown", function (event) {
   const key = event.key.toUpperCase();
   const allowedKeys = /^[A-Z]$/;
@@ -320,6 +326,7 @@ document.addEventListener("keydown", function (event) {
 document.addEventListener("DOMContentLoaded", (event) => {
   const playButton = document.getElementById("play-button");
   const pauseButton = document.getElementById("pause-button");
+  const resetButton = document.getElementById("reset-button");
 
   playButton.addEventListener("click", () => {
     bgMusic.play();
@@ -327,6 +334,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
   pauseButton.addEventListener("click", () => {
     bgMusic.pause();
+  });
+
+  resetButton.addEventListener("click", () => {
+    resetSettings();
   });
 });
 

@@ -84,6 +84,14 @@ body {
     border: none !important;
 }
 
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
 .keyboard {
     display: flex;
     flex-direction: column;
@@ -161,7 +169,7 @@ body {
     border: 1px solid #cccccc;
     border-radius: 5px;
     color: #ffffff;
-    padding: 10px 15px;
+    padding: 10px 5px;
     margin: 5px;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -169,6 +177,52 @@ body {
 
 .audio-control button:hover {
     background-color: #818384;
+}
+
+.reset-btn {
+    position: absolute;
+    top: 15px;
+    left: 10px;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 12px;
+    gap: 8px;
+    height: 34px;
+    width: 144px;
+    border: none;
+    background: #ff362b34;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.lable {
+    line-height: 20px;
+    font-size: 17px;
+    color: #FF342B;
+    font-family: sans-serif;
+    letter-spacing: 1px;
+}
+
+.button:hover {
+    background: #ff362b52;
+}
+
+.button:hover .svg-icon {
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg);
+    }
 }
 
 
