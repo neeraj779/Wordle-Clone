@@ -342,7 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Swal.fire({
       icon: "success",
       title: "Settings Reset!",
-      text: "Your instructions and music settings have been reset. They will be shown again next time you play.",
+      text: "Your instructions and music settings have been restored and will be shown next time you play.",
       showConfirmButton: false,
       toast: true,
       position: "top-end",
