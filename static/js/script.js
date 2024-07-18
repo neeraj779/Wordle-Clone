@@ -54,10 +54,11 @@ document.addEventListener("DOMContentLoaded", () => {
             <p>Good luck and have fun!</p>
           </div>
         `,
-        showCancelButton: true,
         focusConfirm: false,
-        confirmButtonText: "Play!",
+        showConfirmButton: true,
+        showCancelButton: true,
         cancelButtonText: "Don't show again",
+        confirmButtonText: "Start Game!",
         showClass: {
           popup: "animate__animated animate__zoomInUp",
         },
@@ -65,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
           popup: "animate__animated animate__backOutDown",
         },
       }).then((result) => {
-        if (result.dismiss) {
+        if (result.isDismissed) {
           localStorage.setItem("dontShowInstructions", true);
           if (!dontShowMusic) showMusicSwal();
         }
@@ -297,6 +298,12 @@ document.addEventListener("DOMContentLoaded", () => {
       confirmButtonText: "Turn on the music!",
       cancelButtonText: "Don't show again",
       denyButtonText: "No, thanks!",
+      showClass: {
+        popup: "animate__animated animate__bounceInDown",
+      },
+      hideClass: {
+        popup: "animate__animated animate__bounceOutDown",
+      },
     }).then((result) => {
       if (result.isConfirmed) sounds.bgMusic.play();
       if (result.isDismissed) localStorage.setItem("dontShowMusic", true);
