@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gameOver: new Audio("assets/sounds/gameOverSound.wav"),
     bgMusic: new Audio(
       `https://wordle-clone-assets.s3.ap-south-1.amazonaws.com/musics/${getRandomInt(
-        0,
+        1,
         14
       )}.mp3`
     ),
