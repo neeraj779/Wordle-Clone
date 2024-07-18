@@ -356,8 +356,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", (event) => {
     const key = event.key.toUpperCase();
     const allowedKeys = /^[A-Z]$/;
+    const specialKeys = ["ENTER", "BACKSPACE"];
 
-    if (key.match(allowedKeys) || key === "ENTER" || key === "BACKSPACE") {
+    if (allowedKeys.test(key) || specialKeys.includes(key)) {
       handleClick(key);
     } else {
       event.preventDefault();
