@@ -373,15 +373,18 @@ document.addEventListener("DOMContentLoaded", () => {
   playButton.addEventListener("click", () => {
     sounds.bgMusic.play();
     isBgMusicStopped = false;
+    playButton.blur();
   });
 
   pauseButton.addEventListener("click", () => {
     sounds.bgMusic.pause();
     isBgMusicStopped = true;
+    pauseButton.blur();
   });
 
   resetButton.addEventListener("click", () => {
     resetSettings();
+    resetButton.blur();
   });
 
   initializeGame();
