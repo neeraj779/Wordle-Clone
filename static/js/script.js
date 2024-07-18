@@ -110,11 +110,7 @@ function createKeyBoard() {
       keyDiv.setAttribute("id", key);
       keyDiv.addEventListener("click", () => handleClick(key));
 
-      if (key === "Backspace" || key === "Enter") {
-        keyDiv.classList.add("wide");
-      } else if (key === "Space") {
-        keyDiv.classList.add("space");
-      }
+      if (key === "DEL" || key === "ENTER") keyDiv.classList.add("wide");
 
       rowDiv.appendChild(keyDiv);
     });
