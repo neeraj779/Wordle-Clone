@@ -16,7 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
     wrongGuess: new Audio("assets/sounds/wrongGuessSound.mp3"),
     win: new Audio("assets/sounds/winSound.m4a"),
     gameOver: new Audio("assets/sounds/gameOverSound.wav"),
-    bgMusic: new Audio(`assets/musics/${getRandomInt(1, 9)}.mp3`),
+    bgMusic: new Audio(
+      `https://wordle-clone-assets.s3.ap-south-1.amazonaws.com/musics/${getRandomInt(
+        0,
+        14
+      )}.mp3`
+    ),
   };
 
   const randomIndex = getRandomInt(0, wordList.length);
