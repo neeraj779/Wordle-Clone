@@ -20,14 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const randomIndex = getRandomInt(0, wordList.length);
-  const wordle = wordList[randomIndex].toUpperCase();
-  console.log(wordle);
+  let wordle = wordList[randomIndex].toUpperCase();
   let currentRow = 0;
   let currentTile = 0;
   let isGameOver = false;
   let isAnimating = false;
-
-  const guessRows = Array.from({ length: 6 }, () => Array(5).fill(""));
+  let guessRows = Array.from({ length: 6 }, () => Array(5).fill(""));
 
   function initializeGame() {
     showInstructions();
@@ -60,6 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
         focusConfirm: false,
         confirmButtonText: "Play!",
         cancelButtonText: "Don't show again",
+        showClass: {
+          popup: "animate__animated animate__zoomInUp",
+        },
+        hideClass: {
+          popup: "animate__animated animate__backOutDown",
+        },
       }).then((result) => {
         if (result.dismiss) {
           localStorage.setItem("dontShowInstructions", true);
@@ -223,12 +227,12 @@ document.addEventListener("DOMContentLoaded", () => {
         imageUrl: `assets/gifs/${gifImg}`,
         imageWidth: 400,
         imageHeight: 200,
-        imageAlt: "Custom image",
+        imageAlt: "image",
         allowOutsideClick: false,
         confirmButtonText: "Play Again!",
       }).then((result) => {
         if (result.isConfirmed) {
-          location.reload();
+          resetGame();
         }
       });
     }, 4000);
@@ -299,10 +303,47 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function stopSounds() {
+    sounds.win.pause();
+    sounds.gameOver.pause();
+    sounds.win.currentTime = 0;
+    sounds.gameOver.currentTime = 0;
+  }
+
+  function resetGame() {
+    wordle = wordList[getRandomInt(0, wordList.length)].toUpperCase();
+    currentRow = 0;
+    currentTile = 0;
+    isGameOver = false;
+    isAnimating = false;
+    guessRows = Array.from({ length: 6 }, () => Array(5).fill(""));
+
+    document.querySelector(".tile-container").innerHTML = "";
+    document.querySelector(".message-container").innerHTML = "";
+    document.querySelector(".keyboard").innerHTML = "";
+
+    stopSounds();
+    if (sounds.bgMusic.currentTime > 0) sounds.bgMusic.play();
+
+    createGrid();
+    createKeyBoard();
+  }
+
   function resetSettings() {
     localStorage.removeItem("dontShowInstructions");
     localStorage.removeItem("dontShowMusic");
-    location.reload();
+    Swal.fire({
+      icon: "success",
+      title: "Settings Reset!",
+      text: "Instructions and Music settings have been restored. It will be shown next time you play.",
+      showConfirmButton: false,
+      toast: true,
+      position: "top-end",
+      timer: 4000,
+      timerProgressBar: true,
+      width: "450px",
+      background: "#2c2c2e",
+    });
   }
 
   document.addEventListener("keydown", (event) => {
