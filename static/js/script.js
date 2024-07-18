@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let isGameOver = false;
   let isAnimating = false;
   let guessRows = Array.from({ length: 6 }, () => Array(5).fill(""));
+  let isBgMusicStopped = false;
 
   function initializeGame() {
     showInstructions();
@@ -330,7 +331,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".keyboard").innerHTML = "";
 
     stopSounds();
-    if (sounds.bgMusic.currentTime > 0) sounds.bgMusic.play();
+    if (!isBgMusicStopped && sounds.bgMusic.currentTime > 0)
+      sounds.bgMusic.play();
 
     createGrid();
     createKeyBoard();
@@ -370,10 +372,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   playButton.addEventListener("click", () => {
     sounds.bgMusic.play();
+    isBgMusicStopped = false;
   });
 
   pauseButton.addEventListener("click", () => {
     sounds.bgMusic.pause();
+    isBgMusicStopped = true;
   });
 
   resetButton.addEventListener("click", () => {
